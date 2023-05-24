@@ -61,10 +61,12 @@ export default class Server {
         this.loadMiddlewares();
         this.setCors();
         this.loadRoutes();
-        this.listenSockets();
 
         /**Reemplazo de app por httpServer */
         this.httpServer.listen(this.port, this.host, <any>callback);
+
+        /**Siempre la inicialización de los sockets después de levantar la aplicación de Express */
+        this.listenSockets();
     }
 
     public loadRoutes(): void {
