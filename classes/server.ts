@@ -7,7 +7,7 @@ import socketIO from "socket.io";
 
 import { SERVER_HOST, SERVER_PORT } from "../global/environment";
 import router from "../routes/router";
-import { desconectar, mensaje } from "../sockets";
+import { setUser, desconectar, mensaje, conectarCliente } from "../sockets";
 
 /**
  * Clase servidor para la ejecución del servidor express
@@ -47,12 +47,15 @@ export default class Server {
         console.log('Escuchando conexiones - Sockets');
 
         this.io.on('connection', client => {
-            console.log('Nuevo cliente conectado');
-
             /**Aquí se mandan todos los eventos que harán los sockets */
 
+            /**Conectar el cliente */
+            conectarCliente(client);
+            /**Detectar y configurar usuario */
+            setUser(client, this.io);
             /**Desconectar */
             desconectar(client);
+            /**Detectar y emitir mensajes */
             mensaje(client, this.io);
         });
     }
